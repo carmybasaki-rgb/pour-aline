@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Pour Aline</title>
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: linear-gradient(135deg, #fff0f5, #ffe4e1);
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 20px;
+    }
+
+    .card {
+      background: #ffffff;
+      padding: 40px 25px;
+      border-radius: 24px;
+      box-shadow: 0 10px 30px rgba(255, 182, 193, 0.3);
+      text-align: center;
+      max-width: 480px;
+      width: 100%;
+      position: relative;
+      overflow: hidden;
+      border: 2px solid #ffe4e1;
+    }
+
+    h1 {
+      color: #d81b60;
+      font-size: 1.6rem;
+      margin-bottom: 20px;
+      line-height: 1.4;
+    }
+
+    p {
+      color: #4a4a4a;
+      font-size: 1.1rem;
+      margin-bottom: 30px;
+      line-height: 1.6;
+    }
+
+    /* Zone contenant le bouton NON principal */
+    .main-btn-container {
+      margin-bottom: 25px;
+      display: flex;
+      justify-content: center;
+    }
+
+    /* Zone de fuite dédiée au oui pour éviter toute superposition */
+    .flee-zone {
+      position: relative;
+      height: 150px; /* Augmenté pour laisser plus de place au gros oui */
+      width: 100%;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    button {
+      border: none;
+      border-radius: 50px;
+      cursor: pointer;
+      font-weight: bold;
+      transition: transform 0.2s, background-color 0.2s;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    .btn-gros-non {
+      background-color: #e91e63;
+      color: #ffffff;
+      font-size: 1.4rem;
+      padding: 16px 40px;
+      box-shadow: 0 4px 15px rgba(233, 30, 99, 0.3);
+      width: 80%;
+      max-width: 280px;
+    }
+
+    .btn-gros-non:hover {
+      transform: scale(1.05);
+      background-color: #c2185b;
+    }
+
+    /* Bouton OUI : Bien plus gros, environ 70% de la largeur du NON */
+    .btn-mini-oui {
+      background-color: #f48fb1;
+      color: #ffffff;
+      font-size: 1.1rem; /* Police augmentée */
+      padding: 12px 0; /* Padding vertical ajusté */
+      width: 56%; /* Environ 70% de 80% (la largeur du NON) */
+      max-width: 196px; /* 70% de 280px */
+      position: absolute;
+      transition: top 0.2s ease, left 0.2s ease;
+      touch-action: manipulation;
+      box-shadow: 0 2px 8px rgba(244, 143, 177, 0.4);
+    }
+
+    .btn-mini-oui:hover {
+      background-color: #f06292;
+    }
+
+    .btn-suivant {
+      background-color: #e91e63;
+      color: #ffffff;
+      font-size: 1.1rem;
+      padding: 14px 30px;
+      box-shadow: 0 4px 15px rgba(233, 30, 99, 0.3);
+    }
+
+    .btn-suivant:hover {
+      transform: scale(1.05);
+      background-color: #c2185b;
+    }
+
+    .etape {
+      display: none;
+      animation: fadeIn 0.4s ease;
+    }
+
+    .etape.active {
+      display: block;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="card">
+    <!-- Étape 1 : Question principale -->
+    <div id="etape1" class="etape active">
+      <h1>Tu as envie d'abandonner, Aline ? 🥺</h1>
+      
+      <div class="main-btn-container">
+        <button class="btn-gros-non" onclick="passerEtape(2)">NON ! 💪</button>
+      </div>
+
+      <div class="flee-zone" id="fleeZone">
+        <button id="btnOui" class="btn-mini-oui" onmouseenter="fuir()" onclick="fuir()" ontouchstart="fuir()">oui</button>
+      </div>
+    </div>
+
+    <!-- Étape 2 : Première réaction après clic sur NON -->
+    <div id="etape2" class="etape">
+      <h1>Bah tu vois, tu peux prendre de bonnes décisions quand tu veux ! ✨</h1>
+      <p>Pourquoi tu voudrais abandonner d'abord ? Tu es beaucoup trop belle pour abandonner ! Une diva. ❤️</p>
+      <button class="btn-suivant" onclick="passerEtape(3)">Et tu sais quoi ?</button>
+    </div>
+
+    <!-- Étape 3 : Message final de soutien -->
+    <div id="etape3" class="etape">
+      <h1>Rappelle-toi toujours... 🌟</h1>
+      <p>You are a vraie mommy dadan. 🚀</p>
+      <button class="btn-suivant" onclick="passerEtape(1)">Recommencer ❤️</button>
+    </div>
+  </div>
+
+  <script>
+    function fuir() {
+      const btnOui = document.getElementById('btnOui');
+      const zone = document.getElementById('fleeZone');
+
+      const zoneWidth = zone.clientWidth;
+      const zoneHeight = zone.clientHeight;
+      const btnWidth = btnOui.offsetWidth;
+      const btnHeight = btnOui.offsetHeight;
+
+      const maxX = zoneWidth - btnWidth;
+      const maxY = zoneHeight - btnHeight;
+
+      const randomX = Math.max(0, Math.floor(Math.random() * maxX));
+      const randomY = Math.max(0, Math.floor(Math.random() * maxY));
+
+      btnOui.style.left = randomX + 'px';
+      btnOui.style.top = randomY + 'px';
+    }
+
+    function passerEtape(numeroEtape) {
+      document.querySelectorAll('.etape').forEach(el => el.classList.remove('active'));
+      document.getElementById('etape' + numeroEtape).classList.add('active');
+
+      if (numeroEtape === 1) {
+        // Recentrer le bouton oui lors du retour à l'étape 1
+        resetOuiPosition();
+      }
+    }
+
+    function resetOuiPosition() {
+      const btnOui = document.getElementById('btnOui');
+      btnOui.style.left = '50%';
+      btnOui.style.top = '50%';
+      btnOui.style.transform = 'translate(-50%, -50%)';
+    }
+
+    // Positionnement initial centré dans sa zone
+    window.onload = resetOuiPosition;
+    window.onresize = resetOuiPosition; // Ajuster aussi si on redimensionne la fenêtre
+  </script>
+
+</body>
+</html>
